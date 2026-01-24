@@ -18,6 +18,13 @@
 
   <ItemGroup>
     <Folder Include="Resources\Upload\EmployeeProfile\" />
+    <Folder Include="wwwroot\Upload\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Resources\Format\AddAllHolidayFormat.xlsx" />
+    <None Include="wwwroot\Resources\Format\EmployeeAttedanceFormat.xlsx" />
+    <None Include="wwwroot\Resources\Format\EmployeeRegistrationFormat.xlsx" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ namespace EMS.DataAccess.Interface
     {
         Task<ApiResponse> AddHolidaysMaster(HolidayMaster  holiday);
 
-        Task<IList<HolidayMaster>> AddBulkHoliday(int CreatedID,string filePath);
+        Task<ApiResponse> AddBulkHoliday(string filePath);
         Task<ApiResponse> UpdateHolidaysMaster(int ID,HolidayMaster holiday);
         Task<ApiResponse> DeleteHolidaysMaster(int ID, HolidayMaster holiday);
 
@@ -14,6 +14,10 @@ namespace EMS.DataAccess.Interface
         Task<GetHolidayMaster> GetHolidayMastersByID(int ID);
 
         Task<ApiResponse> AddHolidayMappingMaster(HolidayMappingMaster holiday);
+
+        Task<IList<GetHolidaysMapping>> GetAllHolidays();
+
+        Task<ApiResponse> DeleteHolidayMappingByID(int ID);
 
     }
 }

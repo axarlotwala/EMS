@@ -16,10 +16,10 @@ namespace EMS.DbConnection
     public class DapperDbConnectionFactory : IDbFactory
     {
         public string _connectionString = null;
-        public IDbConnection _dbConnection;
-        public IConfiguration _configuration ;
        
-        
+        public IConfiguration _configuration ;
+        public IDbConnection _dbConnection;
+
 
         public DapperDbConnectionFactory(IConfiguration configuration)
         {
@@ -34,32 +34,52 @@ namespace EMS.DbConnection
         {
             //var connection = CreateConnection();
 
-            if (_dbConnection == null)
-            {
-                _dbConnection = new SqlConnection(_connectionString);
-            }
+            //if (_dbConnection == null)
+            //{
+            //    _dbConnection = new SqlConnection(_connectionString);
+            //}
 
-            if (_dbConnection.State == ConnectionState.Closed)
-            {
-                _dbConnection.Open();
-            }
-            return _dbConnection;
+            var conn = new SqlConnection(_connectionString);
+            conn.Open();
+            return conn;
+
+            //if (_dbConnection.State == ConnectionState.Closed ||
+            //    _dbConnection.State == ConnectionState.Broken)
+            //{
+            //    try
+            //    {
+            //        _dbConnection.Open();
+            //    }
+            //    catch
+            //    {
+            //        // recreate the connection if old one is dead
+            //        _dbConnection.Dispose();
+            //        _dbConnection = new SqlConnection(_connectionString);
+            //        _dbConnection.Open();
+            //    }
+            //}
+           // return _dbConnection;
         }
 
         public IDbConnection CloseConnection()
         {
-            try
-            {
-                if (_dbConnection.State == ConnectionState.Open)
-                {
-                    _dbConnection.Close();
-                }
 
-                return _dbConnection;
-            }catch(Exception ex)
-            {
-                throw ex;
-            }
+            var conn = new SqlConnection(_connectionString);
+            conn.Close();
+            return conn;
+
+            //try
+            //{
+            //    if (_dbConnection.State == ConnectionState.Open)
+            //    {
+            //        _dbConnection.Close();
+            //    }
+
+            //    return _dbConnection;
+            //}catch(Exception ex)
+            //{
+            //    throw ex;
+            //}
         }
 
     }

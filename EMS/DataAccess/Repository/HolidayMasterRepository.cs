@@ -9,7 +9,11 @@ namespace EMS.DataAccess.Repository
 {
     public class HolidayMasterRepository : IHolidayMasterRepository
     {
+        
         private readonly IDbFactory _dbConnect;
+        private CommonUtils commonUtils = new CommonUtils();
+
+
         public HolidayMasterRepository(IDbFactory dbFactory) { 
             _dbConnect = dbFactory;
         }
@@ -52,11 +56,12 @@ namespace EMS.DataAccess.Repository
             }
         }
 
-        public async Task<IList<HolidayMaster>> AddBulkHoliday(int CreatedID, string filePath)
+        public async Task<ApiResponse> AddBulkHoliday(string filePath)
         {
             try
             {
-                ApiResponse apiResponse = new ApiResponse();
+                ApiResponse response = new ApiResponse();
+                int OutResult = 0;
 
                 string ProcedureName = "BulkInsertHolidayMaster";
                 var param = new DynamicParameters();
@@ -64,7 +69,7 @@ namespace EMS.DataAccess.Repository
 
 
 
-                CommonUtils commonUtils = new CommonUtils();
+               
                 var dt = commonUtils.ConvertExcelToDataTable(filePath);
                 DataTable datatable = ImportEmployee();
 
@@ -86,13 +91,27 @@ namespace EMS.DataAccess.Repository
                     }
                 }
 
-                param.Add("@CreatedID", CreatedID);
+                //param.Add("@CreatedID", CreatedID);
                 param.Add("@TblBulkHolidaysName", datatable.AsTableValuedParameter("TypeHolidaysMaster"));
+                param.Add("@OutResult", 0, direction: ParameterDirection.Output);
 
-                //param.Add("@OutResult", 0, direction: ParameterDirection.Output);
+                await SqlMapper.ExecuteAsync(_dbConnect.GetConnection(), ProcedureName, param, commandType: CommandType.StoredProcedure);
+                OutResult = param.Get<int>("@OutResult");
 
-                var result = await _dbConnect.GetConnection().QueryAsync<HolidayMaster>(ProcedureName, param, commandType: CommandType.StoredProcedure);
-                return result.ToList();
+                if (OutResult == 1)
+                {
+                    response.Success = 1;
+                    response.Message = "File Upload SuccessFully";
+                }
+                else
+                {
+                    response.Success = 0;
+                    response.Message = "Something went Wrong To Upload";
+                }
+
+                return response;
+                //var result = await _dbConnect.GetConnection().QueryAsync<HolidayMaster>(ProcedureName, param, commandType: CommandType.StoredProcedure);
+                //return result.ToList();
                 //return apiResponse;
             }
             catch (Exception ex)
@@ -159,7 +178,6 @@ namespace EMS.DataAccess.Repository
 
                 var param = new DynamicParameters();
                 param.Add("@ID", ID);
-                param.Add("@UpdatedID", holiday.UpdatedID);
                 param.Add("@OutResult", 0, direction: System.Data.ParameterDirection.Output);
 
                 await SqlMapper.ExecuteAsync(_dbConnect.GetConnection(), proceName, param, commandType: System.Data.CommandType.StoredProcedure);
@@ -242,8 +260,10 @@ namespace EMS.DataAccess.Repository
             {
                 int OutResult = 0;
 
+                var listdata = commonUtils.ToDataTable(holiday.MapData);
+
                 var param = new DynamicParameters();
-                param.Add("@TblDateWiseHolidayMapping", holiday.dateList);
+                param.Add("@TblDateWiseHolidayMapping",listdata.AsTableValuedParameter("TypeHolidayDateMapping"));
                 param.Add("@CreatedID", holiday.CreatedID);
                 param.Add("@OutResult", 0, direction: System.Data.ParameterDirection.Output);
 
@@ -271,6 +291,30 @@ namespace EMS.DataAccess.Repository
                 _dbConnect.CloseConnection();
             }
         }
+
+        public async Task<IList<GetHolidaysMapping>> GetAllHolidays()
+        {
+            try
+            {
+                string proceName = "GetAllHolidayDate";
+
+                //var param = new DynamicParameters();
+                //param.Add("@ID", ID);
+
+                var result = await _dbConnect.GetConnection().QueryAsync<GetHolidaysMapping>(proceName, commandType: System.Data.CommandType.StoredProcedure);
+                return result.ToList();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                _dbConnect.CloseConnection();
+            }
+        }
+
         #endregion
 
 
@@ -280,6 +324,44 @@ namespace EMS.DataAccess.Repository
             dt.Columns.Add("SrNo", typeof(int));
             dt.Columns.Add("HolidayName", typeof(string));
             return dt;
+        }
+
+        public async Task<ApiResponse> DeleteHolidayMappingByID(int ID)
+        {
+            string proceName = "DeleteHolidayMappingByID";
+            ApiResponse apiResponse = new ApiResponse();
+
+            try
+            {
+                int OutResult = 0;
+
+                var param = new DynamicParameters();
+                param.Add("@ID", ID);
+                param.Add("@OutResult", 0, direction: System.Data.ParameterDirection.Output);
+
+                await SqlMapper.ExecuteAsync(_dbConnect.GetConnection(), proceName, param, commandType: System.Data.CommandType.StoredProcedure);
+                OutResult = param.Get<int>("@OutResult");
+
+                if (OutResult == 1)
+                {
+                    apiResponse.Success = 1;
+                    apiResponse.Message = "Delete Holiday Mapping SuccessFully";
+                }
+                else
+                {
+                    apiResponse.Success = 0;
+                    apiResponse.Message = "Somthing Went Wrong To Delete Mapping";
+                }
+                return apiResponse;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                _dbConnect.CloseConnection();
+            }
         }
     }
 }

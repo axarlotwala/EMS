@@ -1,5 +1,12 @@
-﻿namespace EMS.Model
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace EMS.Model
 {
+
+    public class RequestHolidayData
+    {
+       public IFormFile file { get; set; }
+    }
     public class HolidayMaster
     {
         public string Name { get; set; }
@@ -23,10 +30,21 @@
 
     public class HolidayMappingMaster
     {
-        public List<DateTime> dateList { get; set; }
-        public int HolidayMasterID { get; set; }
+        public IList<MapWithDateList>? MapData { get; set; }
         public int? CreatedID { get; set; }
         public int? UpdatedID { get; set; }
     }
 
+    public class MapWithDateList
+    {
+        public DateTime HolidayDate { get; set; }
+        public int ID { get; set; }
+    }
+         
+    public class GetHolidaysMapping
+    {
+        public int ID { get; set; }
+        public DateTime HolidayDate { get; set; }
+        public string Name { get; set; }
+    }
 }
