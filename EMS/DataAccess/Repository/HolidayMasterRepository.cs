@@ -167,7 +167,7 @@ namespace EMS.DataAccess.Repository
             }
         }
 
-        public async Task<ApiResponse> DeleteHolidaysMaster(int ID,HolidayMaster holiday)
+        public async Task<ApiResponse> DeleteHolidaysMaster(int ID)
         {
             string proceName = "DeleteHolidayMaster";
             ApiResponse apiResponse = new ApiResponse();

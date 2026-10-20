@@ -86,9 +86,9 @@ namespace EMS.Controllers
 
         [HttpPost]
         [Route("DeleteHolidaysMaster/{ID}")]
-        public async Task<IActionResult> DeleteHolidaysMaster(int ID, [FromBody] HolidayMaster holidayMaster)
+        public async Task<IActionResult> DeleteHolidaysMaster(int ID)
         {
-            var result = await _holidayMaster.DeleteHolidaysMaster(ID, holidayMaster);
+            var result = await _holidayMaster.DeleteHolidaysMaster(ID);
             return Ok(result);
         }
 

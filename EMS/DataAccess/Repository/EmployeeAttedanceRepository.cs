@@ -6,6 +6,7 @@ using EMS.Model.Employee;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
+using System.Globalization;
 
 namespace EMS.DataAccess.Repository
 {
@@ -66,7 +67,9 @@ namespace EMS.DataAccess.Repository
                         }
                         else
                         {
-                            InTime = DateTime.Parse(dt.Rows[i]["In Time"].ToString());
+                            //InTime = DateTime.Parse(dt.Rows[i].ToString());
+                            //InTime = DateTime.ParseExact(dt.Rows[i]["In Time"].ToString(), "mm/dd/yy", CultureInfo.InvariantCulture); ;
+                            InTime = DateTime.FromOADate(Convert.ToDouble(dt.Rows[i]["In Time"]));
                         }
 
                         if (dt.Rows[i]["Out Time"].ToString() == "" || dt.Rows[i]["Out Time"].ToString() == null)
@@ -75,7 +78,9 @@ namespace EMS.DataAccess.Repository
                         }
                         else
                         {
-                            OutTime = DateTime.Parse(dt.Rows[i]["Out Time"].ToString());
+                            //OutTime = DateTime.Parse(dt.Rows[i]["Out Time"].ToString());
+                            //OutTime = DateTime.ParseExact(dt.Rows[i]["Out Time"].ToString(), "mm/dd/yy", CultureInfo.InvariantCulture);
+                            OutTime = DateTime.FromOADate(Convert.ToDouble(dt.Rows[i]["Out Time"]));
                         }
 
                        
@@ -126,7 +131,9 @@ namespace EMS.DataAccess.Repository
                             }
                             else
                             {
-                                InTime = DateTime.Parse(dt.Rows[i]["In Time"].ToString());
+                                //InTime = DateTime.Parse(dt.Rows[i]["In Time"].ToString());
+                                //InTime = Convert.ToDateTime(dt.Rows[i]["In Time"]);
+                                InTime = DateTime.FromOADate(Convert.ToDouble(dt.Rows[i]["In Time"]));
                             }
 
                             if (dt.Rows[i]["Out Time"].ToString() == "" || dt.Rows[i]["Out Time"].ToString() == null)
@@ -135,7 +142,9 @@ namespace EMS.DataAccess.Repository
                             }
                             else
                             {
-                                OutTime = DateTime.Parse(dt.Rows[i]["Out Time"].ToString());
+                                // OutTime = DateTime.Parse(dt.Rows[i]["Out Time"].ToString());
+                                //OutTime = Convert.ToDateTime(dt.Rows[i]["Out Time"]);
+                                OutTime = DateTime.FromOADate(Convert.ToDouble(dt.Rows[i]["Out Time"]));
                             }
 
                             DataRow dataRow = datatable.NewRow();

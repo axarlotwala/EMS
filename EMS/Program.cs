@@ -40,6 +40,7 @@ builder.Services.AddScoped<IEmployeeAttedanceRepository, EmployeeAttedanceReposi
 builder.Services.AddScoped<IPayrollGenerateEmployeeSalaryRepository, PayrollGenerateEmployeeSalaryRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IEmployeeLeaveRepository, EmployeeLeaveRepository>();
+builder.Services.AddScoped<IPayrollEmployeeIncrementRepository,PayrollEmployeeIncrementRepository>();
 
 
 

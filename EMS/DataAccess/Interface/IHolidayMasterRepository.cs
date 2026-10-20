@@ -8,7 +8,7 @@ namespace EMS.DataAccess.Interface
 
         Task<ApiResponse> AddBulkHoliday(string filePath);
         Task<ApiResponse> UpdateHolidaysMaster(int ID,HolidayMaster holiday);
-        Task<ApiResponse> DeleteHolidaysMaster(int ID, HolidayMaster holiday);
+        Task<ApiResponse> DeleteHolidaysMaster(int ID);
 
         Task<IList<GetHolidayMaster>> GetAllHolidayMasters();
         Task<GetHolidayMaster> GetHolidayMastersByID(int ID);
